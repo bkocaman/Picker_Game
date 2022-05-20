@@ -4,7 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerData playerData;
 
-    [Range(1, 10000)][SerializeField] private float garbageCollector;
+    [SerializeField] private float swiper;
 
     [SerializeField] private Camera camera;
     public bool isActive;
@@ -52,12 +52,12 @@ public class PlayerController : MonoBehaviour
     private void InputGetPos()
     {
         if (Input.GetMouseButtonDown(0))
-            _firstXPos = camera.ScreenToViewportPoint(Input.mousePosition).x - transform.position.x / garbageCollector;
+            _firstXPos = camera.ScreenToViewportPoint(Input.mousePosition).x - transform.position.x / swiper;
 
         if (Input.GetMouseButton(0))
         {
             _secondXPos = camera.ScreenToViewportPoint(Input.mousePosition).x;
-            _deltaX = (_secondXPos - _firstXPos) * garbageCollector;
+            _deltaX = (_secondXPos - _firstXPos) * swiper;
         }
     }
 
