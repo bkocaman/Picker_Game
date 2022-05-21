@@ -19,10 +19,10 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.EventPlay += Open;
-        EventManager.Instance.EventStop += Close;
-        EventManager.Instance.EventContinue += Open;
-        EventManager.Instance.EventFail += Close;
+        EventManager.Instance.OnPlay += Open;
+        EventManager.Instance.OnStop += Close;
+        EventManager.Instance.OnContinue += Open;
+        EventManager.Instance.OnFail += Close;
     }
 
     private void Update()
