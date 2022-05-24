@@ -9,12 +9,18 @@ public class CheckPointDrawer : MonoBehaviour
     [SerializeField] private int maxAmount;
     [SerializeField] private int currentAmount;
     [SerializeField] private int sectionId;
-    private bool isOpened;
+
+    
+    private bool _isOpened;
+    private bool _isTriggered;
+    private Coroutine _coroutine;
+    private Collider _collider;
 
 
     private void Start()
     {
         amountText.text = $"{currentAmount}/{maxAmount}";
+        _collider = GetComponent<Collider>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -24,7 +30,17 @@ public class CheckPointDrawer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("CheckPoint")) EventManager.Instance.OnStop?.Invoke();
+        if (other.CompareTag("CheckPoint") && !_isTriggered)
+        {
+            _isTriggered = true;
+            EventManager.Instance.OnStop?.Invoke();
+        }
+        if (other.CompareTag("Finish") && !_isTriggered)
+        {
+            _isTriggered = true;
+            EventManager.Instance.OnFinish?.Invoke();
+            GameManager.Instance.GameOverScene();
+        }
     }
 
     public static event Action<Transform, int> OnCheckPointArrived;
@@ -33,12 +49,36 @@ public class CheckPointDrawer : MonoBehaviour
     {
         currentAmount++;
         amountText.text = $"{currentAmount}/{maxAmount}";
-        if (currentAmount >= maxAmount && isOpened == false)
+        if (currentAmount >= maxAmount && _isOpened == false)
         {
-            isOpened = true;
+            _isOpened = true;
             StartCoroutine(ContinueLevel());
+            return;
         }
+
+
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        if (_collider.enabled == false)
+        {
+
+            return;
+        }
+       
+           // _coroutine = StartCoroutine(GameOver());
+
     }
+
+    public IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        _collider.enabled = false;
+        GameManager.Instance.GameOverScene();
+    }
+
 
 
     private IEnumerator ContinueLevel()

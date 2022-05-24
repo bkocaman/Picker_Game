@@ -3,15 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CheckPoint
+  - Collectable
+  - CollectArea
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - CollectablesLayer
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
